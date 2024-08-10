@@ -1,0 +1,39 @@
+import requests
+
+# 使用更安全的Cookies存储方式，例如环境变量或配置文件
+cookies = {
+    # 省略了具体的cookie信息，建议使用环境变量或配置文件来存储
+}
+
+# 优化Headers，避免重复字段，使用更简洁的格式
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+    # 其他必要的headers
+}
+
+# 使用更简洁的参数字典
+params = {
+    'type': 'movie',
+    'tag': '热门',
+    'page_limit': 100,
+    'page_start': 0,
+}
+
+# 使用session对象来保持连接，提高效率
+with requests.Session() as session:
+    session.cookies.update(cookies)  # 更新cookies
+    session.headers.update(headers)  # 更新headers
+
+    # 发送请求
+    response = session.get('https://movie.douban.com/j/search_subjects', params=params)
+
+    # 检查响应状态码
+    response.raise_for_status()
+
+    # 解析响应内容
+    movie_dict = response.json()
+
+    # 处理movie_dict中的数据
+    # 例如打印电影列表
+    for movie in movie_dict.get('subjects', []):  # 假设响应数据中电影列表的键是'subjects'
+        print(movie.get('title'))  # 打印电影标题
